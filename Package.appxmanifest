@@ -6,10 +6,7 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   IgnorableNamespaces="uap mp">
 
-  <Identity
-    Name="763af792-8716-4528-af46-5e364a20e6aa"
-    Publisher="Foobar"
-    Version="1.0.0.0" />
+  <Identity Publisher="CN=Mozilla Tmp" Version="1.0.23.0"  Name="ServoApp"/>
 
   <mp:PhoneIdentity PhoneProductId="763af792-8716-4528-af46-5e364a20e6aa" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

@@ -190,6 +190,21 @@ SimpleRenderer::SimpleRenderer() :
     glGenBuffers(1, &mIndexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	HMODULE m = LoadPackagedLibrary(L"simpleservo", 0);
+	if (!m) {
+		throw Exception::CreateException(E_FAIL, L"Can't find simpleservo.dll");
+	}
+	FARPROC method = GetProcAddress(m, "servo_version");
+	if (!method) {
+		throw Exception::CreateException(E_FAIL, L"Can't find servo_version symbol in simpleservo.dll");
+	}
+
+	char* version = (char*)method();
+	std::string s_str = std::string(version);
+	std::wstring wid_str = std::wstring(s_str.begin(), s_str.end());
+	OutputDebugString(wid_str.c_str());
+
 }
 
 SimpleRenderer::~SimpleRenderer()
