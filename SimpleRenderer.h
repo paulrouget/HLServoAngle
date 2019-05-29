@@ -15,5 +15,6 @@ namespace foobar
     private:
         GLsizei mWindowWidth;
         GLsizei mWindowHeight;
+		bool mServoReady;
     };
 }

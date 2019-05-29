@@ -18,14 +18,12 @@ void loadServo();
 
 SimpleRenderer::SimpleRenderer() :
     mWindowWidth(0),
-    mWindowHeight(0)
+    mWindowHeight(0),
+	mServoReady(false)
 {
-	const char* version = servo_version();
-	std::string s_str = std::string(version);
-	std::wstring wid_str = std::wstring(s_str.begin(), s_str.end());
-	OutputDebugString(wid_str.c_str());
 
-	loadServo();
+
+
 }
 
 SimpleRenderer::~SimpleRenderer()
@@ -35,8 +33,13 @@ SimpleRenderer::~SimpleRenderer()
 
 void SimpleRenderer::Draw()
 {
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if (!mServoReady) {
+		loadServo();
+		mServoReady = true;
+	}
+    // glEnable(GL_DEPTH_TEST);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	// perform_updates();
 }
@@ -67,8 +70,9 @@ void on_animating_changed(bool animating) {}
 void on_shutdown_complete() {}
 
 void loadServo() {
+
 	CInitOptions o;
-	o.args = "[\"https://example.com\"]";
+	o.args = NULL;
 	o.url = "https://servo.org";
 	o.width = 600;
 	o.height = 600;
