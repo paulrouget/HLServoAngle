@@ -10,19 +10,21 @@ extern "C" {
 #include <simpleservo.h>
 }
 
+static bool dirty = false;
+static bool animating = false;
+
 using namespace Platform;
 
 using namespace foobar;
 
-void loadServo();
+void loadServo(int, int);
 
 SimpleRenderer::SimpleRenderer() :
     mWindowWidth(0),
-    mWindowHeight(0),
-	mServoReady(false)
+    mWindowHeight(0)
 {
 
-
+	loadServo(mWindowWidth, mWindowHeight);
 
 }
 
@@ -31,34 +33,43 @@ SimpleRenderer::~SimpleRenderer()
 
 }
 
-void SimpleRenderer::Draw()
+bool SimpleRenderer::Draw()
 {
-	if (!mServoReady) {
-		loadServo();
-		mServoReady = true;
-	}
+
     // glEnable(GL_DEPTH_TEST);
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// glClearColor(1.0, 1.0, 1.0, 1.0);
 
-	// perform_updates();
+	perform_updates();
+	if (dirty || animating) {
+		dirty = false;
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void SimpleRenderer::UpdateWindowSize(GLsizei width, GLsizei height)
 {
-    glViewport(0, 0, width, height);
-    mWindowWidth = width;
-    mWindowHeight = height;
+	if (width != mWindowWidth || height != mWindowHeight) {
+		glViewport(0, 0, width, height);
+		mWindowWidth = width;
+		mWindowHeight = height;
+		resize(mWindowWidth, mWindowHeight);
+	}
 }
 
 
 void flush() {
+	dirty = true;
 }
 
 void make_current() {
 }
 
 void wakeup() {
+	dirty = true;
 }
 
 void on_load_started() {}
@@ -66,16 +77,18 @@ void on_load_ended() {}
 void on_title_changed(const char *foo) {}
 void on_url_changed(const char* foo) {}
 void on_history_changed(bool back, bool fwd) {}
-void on_animating_changed(bool animating) {}
+void on_animating_changed(bool aAnimating) {
+	animating = aAnimating;
+}
 void on_shutdown_complete() {}
 
-void loadServo() {
+void loadServo(int width, int height) {
 
 	CInitOptions o;
 	o.args = NULL;
-	o.url = "https://servo.org";
-	o.width = 600;
-	o.height = 600;
+	o.url = "https://example.com";
+	o.width = width;
+	o.height = height;
 	o.density = 1.0;
 	o.enable_subpixel_text_antialiasing = true;
 

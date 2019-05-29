@@ -9,12 +9,11 @@ namespace foobar
     public:
         SimpleRenderer();
         ~SimpleRenderer();
-        void Draw();
+        bool Draw();
         void UpdateWindowSize(GLsizei width, GLsizei height);
 
     private:
         GLsizei mWindowWidth;
         GLsizei mWindowHeight;
-		bool mServoReady;
     };
 }
